@@ -49,8 +49,8 @@ integer result.
 (* We were looking for a simple solution recursive in the exponent: *)
 
 let rec power (base : int) (exponent : int) : int = 
- if exponent <= 0 then 1
- else base * power base (pred exponent) ;;
+  if exponent <= 0 then 1
+  else base * power base (pred exponent) ;;
 
 (* If one wanted to handle the negative exponent cases, raising an
    exception is probably the way to go:
@@ -60,6 +60,27 @@ let rec power (base : int) (exponent : int) : int =
        raise (Invalid_argument "power: negative exponent")
      else if exponent = 0 then 1
      else base * power base (pred exponent) ;; 
+
+   You might think to use the exponentiation operator for `float`s for
+   this exercise, something like
+
+    let power_float (base : int) (exponent : int) : int =
+       int_of_float (float_of_int base ** float_of_int exponent) ;;
+
+   But this can actually calculate incorrectly because of the
+   approximations in the conversions between the number
+   representations:
+
+    # power 17 15 ;;
+    - : int = 2862423051509815808
+    # power_float 17 15 ;;
+    - : int = 2862423051509815793
+    # max_int ;;
+    - : int = 4611686018427387903
+
+   Notice that `power` and `power_float` give different answers. This
+   isn't an integer overflow problem, as the `max_int` value
+   demonstrates.
  *)
 
 (*....................................................................
@@ -83,7 +104,7 @@ Consider this snippet of code, which defines an algebraic data type
       | Combine of ('a -> 'a) * ('a combine)
       | Base of ('a -> 'a) * ('a option) ;;
 
-    let rec f (x : 'a combine) (a : 'a) : 'a =
+    let rec f x a =
       match x with
       | Base (f, None) -> f a
                           ^^^ -----------a
@@ -96,7 +117,7 @@ Consider this snippet of code, which defines an algebraic data type
 
 For each of the subexpressions underlined with ^^^ and labeled with a
 letter, specify the type of the subexpression in the context in which
-it appears. If the unerlined element is not a single subexpression (and
+it appears. If the underlined element is not a single subexpression (and
 therefore has no type), answer "no type".
 
 ......................................................................
@@ -349,7 +370,8 @@ let find (condition : 'a -> bool) (lst : 'a list) : 'a =
 
     let find (condition : 'a -> bool) (lst : 'a list) : 'a =
       match
-        fold_right (fun elt restvalue -> if condition elt then Some elt else restvalue)
+        fold_right (fun elt restvalue -> if condition elt then Some elt
+                                         else restvalue)
                    lst
                    None with
       | None -> raise Not_found
@@ -418,7 +440,7 @@ or in parallel.
 
 So that later problems use the same type definition, after you've
 defined the type, check it against our intended type definition at
-<http://url/cs51/io/lab11-2>.
+<http://url.cs51.io/lab11-2>.
 ....................................................................*)
 
 type circuit =
