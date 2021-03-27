@@ -72,9 +72,9 @@ let rec power (base : int) (exponent : int) : int =
    representations:
 
     # power 17 15 ;;
-    - : int = 2862423051509815808
-    # power_float 17 15 ;;
     - : int = 2862423051509815793
+    # power_float 17 15 ;;
+    - : int = 2862423051509815808
     # max_int ;;
     - : int = 4611686018427387903
 
